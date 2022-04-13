@@ -62,3 +62,9 @@ fields @timestamp, @message, log_data
 | stats count(*)
 | sort @timestamp desc
 | limit 10000
+
+#
+fields @timestamp,@message,@logStream
+| filter strcontains(@message, "[postOrquestador][84][#Response:][oferta: True]")
+| limit 10000
+| sort @timestamp asc
