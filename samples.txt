@@ -1,0 +1,64 @@
+#
+fields @timestamp, @message, log_data.TiempoTotal as TiempoTotal
+| filter TiempoTotal > 1500 
+| stats avg(TiempoTotal)
+| sort TiempoTotal desc
+| limit 10000
+
+#
+fields @timestamp, @message, log_data
+| filter log_data.Mensaje like /identificacion/ and log_data.TiempoTotal < 400
+| stats avg(log_data.TiempoTotal)
+-> issued
+
+#
+fields @timestamp, @message, log_data.TiempoTotal as TiempoTotal
+| filter @message like /identificacion/ and @message like /Operación Exitosa/
+| stats count(*) by TiempoTotal
+
+#
+fields @timestamp, @message, log_data.TiempoTotal as TiempoTotal
+| filter TiempoTotal < 1500
+| stats count(*)
+| sort @timestamp desc
+| limit 10000
+
+#
+fields @timestamp, @message, log_data.TiempoTotal as TiempoTotal
+| filter TiempoTotal > 1500 and TiempoTotal < 4000
+| stats count(*)
+| sort @timestamp desc
+| limit 10000
+
+#
+fields @timestamp, @message, log_data.TiempoTotal as TiempoTotal
+| filter TiempoTotal > 4000
+| stats count(*)
+| sort @timestamp desc
+| limit 10000
+
+#
+fields @timestamp, @message, transaccion.path as path
+| filter path like /recompra\/mejor-oferta/
+| stats count(*) by datefloor(@timestamp, 24h)
+
+#
+fields @timestamp, @message, log_data
+| filter log_data.servicios.3.Tiempo > 1000 and log_data.servicios.3.Tiempo < 1500
+| stats count(*)
+| sort @timestamp desc
+| limit 10000
+
+#
+fields @timestamp, @message, log_data
+| filter log_data.servicios.3.Tiempo > 1500 and log_data.servicios.3.Tiempo < 4000
+| stats count(*)
+| sort @timestamp desc
+| limit 10000
+
+#
+fields @timestamp, @message, log_data
+| filter log_data.servicios.3.Tiempo > 4000
+| stats count(*)
+| sort @timestamp desc
+| limit 10000
